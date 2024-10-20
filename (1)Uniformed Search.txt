@@ -1,0 +1,47 @@
+#Uniformed Search 
+from collections import deque
+
+def bfs(graph, start, goal):
+    queue = deque([[start]])
+    visited = set()
+
+    while queue:
+        path = queue.popleft()
+        node = path[-1]
+
+        if node in visited:
+            continue
+
+        visited.add(node)
+
+        if node == goal:
+            return path
+
+        for neighbor in graph.get(node, []):
+            new_path = list(path)
+            new_path.append(neighbor)
+            queue.append(new_path)
+
+    return None
+
+# Function to take user input for the graph
+def input_graph():
+    graph = {}
+    num_nodes = int(input("Enter the number of nodes: "))
+    for _ in range(num_nodes):
+        node = input("Enter node: ")
+        neighbors = input(f"Enter neighbors of {node} (space-separated): ").split()
+        graph[node] = neighbors
+    return graph
+
+# User input
+graph = input_graph()
+start_node = input("Enter the start node: ")
+goal_node = input("Enter the goal node: ")
+
+# Running BFS
+result = bfs(graph, start_node, goal_node)
+if result:
+    print(f"Path found: {result}")
+else:
+    print("No path found.")

@@ -1,0 +1,20 @@
+#Local Search (Hill Climbing)
+import random
+
+def objective_function(x):
+    return -(x ** 2) + 10 * x
+
+def hill_climbing(start, iterations, step):
+    current = start
+    for _ in range(iterations):
+        new = current + random.choice([-step, step])
+        if objective_function(new) > objective_function(current):
+            current = new
+    return current, objective_function(current)
+
+# Parameters
+starting_point = random.uniform(0, 10)
+
+# Run the algorithm and print results
+solution, value = hill_climbing(starting_point, 100, 0.1)
+print(f"Starting Point: {starting_point:.2f}\nSolution: {solution:.2f}, Value: {value:.2f}")

@@ -1,0 +1,58 @@
+#Informed Search
+import heapq
+
+def bfs(graph, start, goal, heuristic):
+    pqueue = [(heuristic[start], [start])]
+    visited = set()
+
+    while pqueue:
+        _, path = heapq.heappop(pqueue)
+        node = path[-1]
+        
+        if node in visited:
+            continue
+    
+        visited.add(node)
+    
+        if node == goal:
+                return path
+    
+        for neighbor in graph.get(node, []):
+            newpath = list(path)
+            newpath.append(neighbor)
+            heapq.heappush(pqueue, (heuristic[neighbor], newpath))
+            
+    return None    
+    
+
+
+def inputgraph():
+	graph = {}
+	Nnode = int(input("Enter no of node"))
+	for _ in range(Nnode):
+		node = input("Enter node")
+		neighbors= input(f"Enter neighbor of {node} (space)").split()
+		graph[node] = neighbors
+	return graph
+
+
+def inputheuristic(nodes):
+	heuristic = {}
+	for node in nodes:
+		h_value = int(input(f"Enter heuristic value of {node}"))
+		heuristic[node] = h_value
+	return heuristic
+
+
+graph = inputgraph()
+startN = input("Enter start node")
+endN = input("enter End node")
+nodes = list(graph.keys())
+heuristic = inputheuristic(nodes)
+
+
+result = bfs(graph, startN, endN, heuristic)
+if result:
+	print(f"path found {result}")
+else:
+	print("no path")
