@@ -1,0 +1,47 @@
+import heapq
+
+class Node:
+    def __init__(self, state, h):
+        self.state = state
+        self.h = h  # Heuristic cost to goal
+
+    def __lt__(self, other):
+        return self.h < other.h
+
+def heuristic(a, b):
+    return abs(a[0] - b[0]) + abs(a[1] - b[1])
+
+def greedy_best_first_search(start, goal, graph):
+    open_set = []
+    heapq.heappush(open_set, Node(start, heuristic(start, goal)))
+    visited = set()
+
+    while open_set:
+        current_node = heapq.heappop(open_set)
+
+        if current_node.state == goal:
+            return current_node.state  # Return goal state when found
+
+        visited.add(current_node.state)
+
+        for neighbor in graph.get(current_node.state, []):
+            if neighbor not in visited:
+                heapq.heappush(open_set, Node(neighbor, heuristic(neighbor, goal)))
+
+    return None  # No path found
+
+# Simple graph as an adjacency list
+graph = {
+    (0, 0): [(0, 1), (1, 0)],
+    (0, 1): [(0, 0), (0, 2)],
+    (0, 2): [(0, 1), (1, 2)],
+    (1, 0): [(0, 0), (1, 1)],
+    (1, 1): [(1, 0), (1, 2)],
+    (1, 2): [(1, 1), (0, 2)],
+}
+
+start = (0, 0)
+goal = (1, 2)
+path = greedy_best_first_search(start, goal, graph)
+
+print("Goal reached:", path)
